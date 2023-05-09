@@ -28,7 +28,6 @@ const dataListSubtitle = document.querySelector('[data-list-subtitle]');
 const dataListClose = document.querySelector('[data-list-close]');
 const dataSearchForm = document.querySelector('[data-search-form]');
 
-
 const matches = books//
 let page = 1;//
 
@@ -77,7 +76,7 @@ return fragment;
 };
 
 dataListsItems.appendChild(createPreviewsFragment(matches, 0, BOOKS_PER_PAGE));
-//dataListsItems.style.display = "grid";
+dataListsItems.style.display = "grid";
 
 const genresFragment = document.createDocumentFragment();
 const genresOptionAll = document.createElement('option');
@@ -109,6 +108,8 @@ for (const [id, name] of Object.entries(authors)) {
 
 dataSearchAuthors.appendChild(authorsFragment);
 
+//THEME SETTINGS
+
 dataHeaderSettings.addEventListener('click', () => {
     dataSettingsOverlay.style.display = "block";
 });
@@ -133,21 +134,19 @@ dataSettingsCancel.addEventListener("click" , () => {
     dataSettingsOverlay.style.display = "none";
 });
 
-
-
 dataSettingsForm.addEventListener("submit", () => { dataSettingsForm.submit });
 
 
 // SHOW MORE BUTTON.
 
-dataListButton = 'Show more' ( books.length - BOOKS_PER_PAGE);
+//dataListButton = 'Show more' ( books.length - BOOKS_PER_PAGE);
 
 dataListButton.disabled = !(matches.length - [page * BOOKS_PER_PAGE] > 0)
 
-dataListButton.innerHTML = /* html */ [
-    `<span>Show more</span>`
-    `<span class="list__remaining"> (${matches.length - [page * BOOKS_PER_PAGE] > 0 ? matches.length - [page * BOOKS_PER_PAGE] : 0})</span>`,
-]
+// dataListButton.innerHTML = /* html */ [
+//     `<span>Show more</span>`
+//     `<span class="list__remaining"> (${matches.length - [page * BOOKS_PER_PAGE] > 0 ? matches.length - [page * BOOKS_PER_PAGE] : 0})</span>`,
+// ]
 
 dataListClose.addEventListener("click", () => { dataListActive.open = false });
 
@@ -162,42 +161,68 @@ dataListButton.addEventListener( "click", () => {
 // // search
 
 //SEARCH BUTTON
+
 dataHeaderSearch.addEventListener( "click", () => {
     if ((dataSearchOverlay.open = true))  {
     dataSearchTitle.focus();
     }
+    //dataSearchOverlay.style.display = "block";
 });
 
 dataSearchCancel.addEventListener("click", () => {
     if ((dataSearchOverlay.open = true)) {
         dataSearchOverlay.close();
     }
+    //dataSearchOverlay.style.display = "none";
 });
 
-// dataSearchForm.addEventListener( "click", () => {
-//     preventDefault();
-//     const formData = new FormData(dataSearchForm.target)
-//     const filters = Object.fromEntries(formData)
-//     const result = []
+dataSearchForm.addEventListener( "click", (event) => {
+    event.preventDefault();
+    dataListsItems.style.display = "none";
+    dataListMessage.innerHTML = '';
+    const formData = new FormData(event.target)
+    const filters = Object.fromEntries(formData) 
+         const titleMatch = filters.title   //
+         const authorMatch = filters.author 
+         const genreMatch = filters.genre 
+    const result = []
 
-//     for (let books of booksList) {
-//          const titleMatch = filters.title.trim() = '' && books.title.toLowerCase().includes[filters.title.toLowerCase()];
-//          const authorMatch = filters.author = 'any' || books.author === filters.author;
-//          const genreMatch = filters.genre = 'any';
-//         {
-            
-//             for (genres; books.genres; i++) { 
-//                 if (singleGenre = filters.genre) {
-//                      genreMatch = true }}}
-//         }
+    for (let i = 0; i < books.length; i++) {
+     const book = books[i];
+      
+        if(genreMatch === 'any' && authorMatch === 'any') {
+                if(book.title.toLowerCase().includes(titleMatch.toLowerCase())){
+                    result.push(book);
+                }
+        }
+         
+        if (genreMatch === 'any') {
+            if (book.title.toLowerCase().includes(titleMatch.toLowerCase()) && book.author === authorMatch) {
+                result.push(book);
+            }
+        }
+        if (titleMatch === '') { 
+            if (book.author === authorMatch && book.genres.includes(genreMatch)) {
+                result.push(book);
+            }
+        }
 
-//         if (titleMatch && authorMatch && genreMatch) {result.push(books)};
+        if (titleMatch === ''&& authorMatch === 'any') {
+            if (book.genres.includes(genreMatch)){
+                result.push(books);
+            }
+        }
 
-//     if (result.length > 0){ 
-//     dataListMessage.style.add('list__message_show');
-//     }else {
-//         dataListMessage.innerText = ('list__message_show');
-//     }
+
+        if (result.length > 0){ 
+            dataListMessage.innerHTML = '';
+            dataListButton.disabled = true;
+            dataListMessage.style.marginTop = '-125px';
+        } else {
+            dataListMessage.innerText = 'No resluts found. Your filters might be too narrow.';
+            dataListButton.disabled = true;
+        }
+    }
 
 //     dataListsItems.innerHTML = '';
 //     const fragment1 = document.createDocumentFragment()
@@ -210,8 +235,8 @@ dataSearchCancel.addEventListener("click", () => {
 //         element1.setAttribute('data-preview', id, author, title, genres, image, description, published)
 
 //         element1.innerHTML = /* html */ `
-//             <img
-//                 class="preview__image"
+
+//             <img class="preview__image"
 //                 src="${image}"
 //             />
             
@@ -224,22 +249,20 @@ dataSearchCancel.addEventListener("click", () => {
 //         fragment1.appendChild(element1)
 //     }
 //     dataListsItems.appendChild(fragment1)
-// });
+});
     
 
+    // const initial = matches.length - [page * BOOKS_PER_PAGE]
+    // const remaining = hasRemaining ? initial : 0
+    // dataListButton.disabled = initial > 0
 
+    // dataListButton.innerHTML = /* html */ `
+    //     <span>Show more</span>
+    //     <span class="list__remaining"> (${remaining})</span>
+    // `
 
-//     const initial = matches.length - [page * BOOKS_PER_PAGE]
-//     const remaining = hasRemaining ? initial : 0
-//     dataListButton.disabled = initial > 0
-
-//     dataListButton.innerHTML = /* html */ `
-//         <span>Show more</span>
-//         <span class="list__remaining"> (${remaining})</span>
-//     `
-
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//     dataSearchOverlay.open = false
+    // window.scrollTo({ top: 0, behavior: 'smooth' });
+    // dataSearchOverlay.open = false
 
 // dataSettingsOverlay.addEventListener ("submit", () => {
 //    // preventDefault()
@@ -255,7 +278,8 @@ dataSearchCancel.addEventListener("click", () => {
 //     active;
 
 //     for (node; pathArray; i++) {
-//         if (active) {break
+//         if (active) {
+//             break
 //         const previewId = node?.dataset?.preview
 //         }
 //         for (const singleBook of books) {
