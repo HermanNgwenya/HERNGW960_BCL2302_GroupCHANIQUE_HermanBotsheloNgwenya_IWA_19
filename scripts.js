@@ -28,20 +28,20 @@ const dataListSubtitle = document.querySelector('[data-list-subtitle]');
 const dataListClose = document.querySelector('[data-list-close]');
 const dataSearchForm = document.querySelector('[data-search-form]');
 
-const matches = books//
-let page = 1;//
+const matches = books                                     // Declared matches as a constant variable
+let page = 1;                                             // declared page as a changeable variable
 
-const day = {//
+const day = {                                             //  declared as an object
     dark: '10, 10, 20',
     light: '255, 255, 255',
 };
 
-const night = {//
+const night = {                                           // declared as an object
     dark: '255, 255, 255',
     light: '10, 10, 20',
 };
 
-const createPreview = ({ author, id, image, title }) => { //
+const createPreview = ({ author, id, image, title }) => { // created a createPreview functon
     const element = document.createElement('button');
     element.classList = 'preview';
     element.setAttribute('data-preview', id);
@@ -56,7 +56,7 @@ const createPreview = ({ author, id, image, title }) => { //
   return element;
 };
 
-const createPreviewsFragment = (books, startIndex, endIndex) => {
+const createPreviewsFragment = (books, startIndex, endIndex) => {                               // created a createPreviewFragment functon
 const fragment = document.createDocumentFragment()//
 
 const extracted = books.slice(startIndex, endIndex)//
