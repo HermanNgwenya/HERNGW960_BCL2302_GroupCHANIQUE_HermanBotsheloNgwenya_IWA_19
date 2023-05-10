@@ -31,10 +31,6 @@ const dataSearchForm = document.querySelector('[data-search-form]');
 const matches = books//
 let page = 1;//
 
-// if (!books && !Array.isArray(books)) throw new Error('Source required') 
-// if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
-
-
 const day = {//
     dark: '10, 10, 20',
     light: '255, 255, 255',
@@ -107,6 +103,8 @@ for (const [id, name] of Object.entries(authors)) {
 }
 dataSearchAuthors.appendChild(authorsFragment);
 
+
+
 //THEME SETTINGS
 
 dataHeaderSettings.addEventListener('click', () => {
@@ -136,20 +134,21 @@ dataSettingsCancel.addEventListener("click" , () => {
 dataSettingsForm.addEventListener("submit", () => { dataSettingsForm.submit });
 
 
+
 //SEARCH BUTTON
 
 dataHeaderSearch.addEventListener( "click", () => {
-    if ((dataSearchOverlay.open = true))  {
-    dataSearchTitle.focus();
-    }
-    //dataSearchOverlay.style.display = "block";
+    // if ((dataSearchOverlay.open = true))  {
+    // dataSearchTitle.focus();
+    // }
+    dataSearchOverlay.style.display = "block";
 });
 
 dataSearchCancel.addEventListener("click", () => {
-    if ((dataSearchOverlay.open = true)) {
-        dataSearchOverlay.close();
-    }
-    //dataSearchOverlay.style.display = "none";
+    // if ((dataSearchOverlay.open = true)) {
+    //     dataSearchOverlay.close();
+    // }
+    dataSearchOverlay.style.display = "none";
 });
 
 dataSearchForm.addEventListener( 'submit', (event) => {
@@ -200,7 +199,7 @@ dataSearchForm.addEventListener( 'submit', (event) => {
     }
 
 document.querySelector('[class="list__message"]').style.display = 'block'
-
+console.log(result);
 
     const fragment1 = document.createDocumentFragment()
 
@@ -232,12 +231,13 @@ document.querySelector('[class="list__message"]').style.display = 'block'
     dataSearchOverlay.style.display = "none";
 })
     
+
 // SHOW MORE BUTTON.
 
 let startIndex= 0;//
 let endIndex = 36;//
 
-const showMoreButton = document.querySelector('[data-list-button]')
+const showMoreButton = dataListButton
 let numOfBooks = books.length -36
 showMoreButton.innerHTML =  `Show more (${numOfBooks})`
 if(showMoreButton.innerHTML === `Show more (${-12})`){
@@ -256,7 +256,7 @@ showMoreButton.addEventListener('click', () => {
     const startIndex1 = startIndex
     const endIndex1 = endIndex
     const extracted = books.slice(startIndex1, endIndex1)
-for (const {author ,image, title, id , description, published} of extracted) {
+for (const {author, image, title, id , description, published} of extracted) {
      const preview = document.createElement('button')
      preview.className = 'preview'
      preview.dataset.id = id
@@ -275,11 +275,22 @@ for (const {author ,image, title, id , description, published} of extracted) {
      </div>`
      fragment.appendChild(preview)
      }
- const booklist1 = document.querySelector('[data-list-items]')
+ const booklist1 = dataListsItems
  booklist1.appendChild(fragment)
     });
 
-// when click on each book display details
+
+//Home button
+const homeButton = document.querySelector('[class="header__text"]');
+homeButton.addEventListener('click', () =>{
+dataListsItems.style.display = "block";
+dataListsItems.style.display = "grid";
+dataListMessage.style.display = "none";
+dataListButton.disabled = false
+});
+
+
+//  click on each book to display details.
 const detailsToggle = (event) => {
     event.target.dataset.id ? dataListActive.style.display = "block" : undefined;
     event.target.dataset.description ? dataListDescription.innerHTML = event.target.dataset.description : undefined;
@@ -288,9 +299,10 @@ const detailsToggle = (event) => {
     event.target.dataset.image ? dataListImage.setAttribute ('src', event.target.dataset.image) : undefined;
     event.target.dataset.image ? dataListBlur.setAttribute ('src', event.target.dataset.image) : undefined;
 };
+
 const detailsClose = dataListClose
 detailsClose.addEventListener('click', () => {
 dataListActive.style.display = "none";
 })
 const bookclick = dataListsItems
-bookclick.addEventListener('click', detailsToggle)
+bookclick.addEventListener('click', detailsToggle);
